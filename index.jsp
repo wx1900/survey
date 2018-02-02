@@ -156,7 +156,7 @@
                             out.print("<div class=\"ui vertical padded segment\">");
                                 out.print("<div class=\"ui form\">");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Evaluate the syntax and fluency of the above reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Evaluate the syntax and fluency of the above replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -174,7 +174,7 @@
                                         out.print("</div>");
                                     out.print("</div>");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Evaluate the logical relationship between the tweet and reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Evaluate the logical relationship between the tweet and replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -192,7 +192,7 @@
                                         out.print("</div>");
                                     out.print("</div>");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Please choose the emotional orientation of the reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Please choose the emotional orientation of the replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -246,7 +246,7 @@
                                             for (int i = 0; i < user_num; i++){
                                                 out.print("<div class\"field\">");
                                                 out.print("<div class=\"ui radio checkbox\">");
-                                                out.print("<input type=\"radio\" name=\"user_reply"+(k+1)+"\" value=\"" + (i+1) + "\">");
+                                                out.print("<input type=\"radio\" name=\"user_reply"+(k+1)+"v"+j+"\" value=\"" + (i+1) + "\">");
                                                 out.print("<label>User "+ (i+1) +"</label>");
                                                 out.print("</div>");
                                                 out.print("</div>");

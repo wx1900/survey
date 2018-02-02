@@ -27,6 +27,12 @@
                     out.print("<form class = \"ui form segment\" action = \"test2.jsp?part=" + (part+part_num) + "&part_num="+part_num+"&name="+name+"\" method = \"POST\">");
                 %>
                 <div class="ui small header"> This survey has 200 parts, you have finished <%=part%> parts, <%=left%> to go. </div>
+                <div class="ui progress" data-value="<%=part %>" data-total="200" id="example6">
+                <div class="bar">
+                    <div class="progress"></div>
+                </div>
+                <%-- <div class="label">Carga de archivos</div> --%>
+                </div>
                 <%
                 String driver = "com.mysql.jdbc.Driver"; 
                 String url = "jdbc:mysql://localhost:3306/tomcat"; 
@@ -130,7 +136,7 @@
                             out.print("<div class=\"ui vertical padded segment\">");
                                 out.print("<div class=\"ui form\">");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Evaluate the syntax and fluency of the above reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Evaluate the syntax and fluency of the above replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -148,7 +154,7 @@
                                         out.print("</div>");
                                     out.print("</div>");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Evaluate the logical relationship between the tweet and reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Evaluate the logical relationship between the tweet and replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -166,7 +172,7 @@
                                         out.print("</div>");
                                     out.print("</div>");
                                     out.print("<div class=\"grouped fields\">");
-                                        out.print("<h3 class=\"ui header\">Please choose the emotional orientation of the reply.</h3>");
+                                        out.print("<h3 class=\"ui header\">Please choose the emotional orientation of the replies.</h3>");
                                         out.print("<div class=\"ui horizontal segments\">");
                                         for (int k = 0; k < 2; k++) {
                                             out.print("<div class=\"ui segment\">");
@@ -191,6 +197,65 @@
                             out.print("</div>");
                             out.print("</div>");
                             }
+                                                        out.print("<h3 class=\"ui top attached header\">User Style</h3>");
+                            out.print("<div class = \"ui blue segment\">");
+                                out.print("<div class=\"ui vertical segment\">");
+                                    out.print("<h3 class=\"ui header\">Post</h3>");
+                                    sql = conn.createStatement();
+                                    rs = sql.executeQuery("select * from post limit 0,1");
+                                    while(rs.next()) {
+                                        out.print("<h4>"+rs.getString(1)+"</h4>");
+                                    }
+                                    out.print("<div class=\"ui section divider\"></div>");
+                                    for (int i = 0; i < user_num; i++) {
+                                        out.print("<h3 class=\"ui header\">Reply "+(i+1)+"</h3>");
+                                        rs = sql.executeQuery("select * from comment limit "+i+",1");
+                                        while(rs.next()) {
+                                            out.print("<h4>"+rs.getString(1)+"</h4>");
+                                        }
+                                    }
+                                out.print("</div>");
+                                out.print("<div class=\"ui vertical segment\">");
+                                    out.print("<div class=\"ui form\">");
+                                        out.print("<h3 class=\"ui header\">Please select the user with the closest language style. </h3>");
+                                        out.print("<div class=\"ui horizontal segments\">");
+                                        for (int k = 0; k < user_num; k++) {
+                                            out.print("<div class=\"ui segment\">");
+                                            out.print("<div class=\"ui small header\">Reply"+(k+1)+"</div>");
+                                            out.print("<div class=\"grouped fields\">");
+                                            for (int i = 0; i < user_num; i++){
+                                                out.print("<div class\"field\">");
+                                                out.print("<div class=\"ui radio checkbox\">");
+                                                out.print("<input type=\"radio\" name=\"user_reply"+(k+1)+"v"+j+"\" value=\"" + (i+1) + "\">");
+                                                out.print("<label>User "+ (i+1) +"</label>");
+                                                out.print("</div>");
+                                                out.print("</div>");
+                                            }
+                                            out.print("</div>");
+                                            out.print("</div>");
+                                        }
+                                        out.print("</div>");
+                                        out.print("<div class=\"ui accordion\">");
+                                        for (int i = 0; i < user_num; i++) {
+                                            out.print("<div class=\"title\">");
+                                            out.print("<i class=\"dropdown icon\"></i>");
+                                            out.print("User "+(i+1));
+                                            out.print("</div>");
+                                            out.print("<div class=\"content\">");
+                                            out.print("<p class=\"transition hidden\">");
+                                            int no = 1;
+                                            rs = sql.executeQuery("select * from comment limit " + (i*20) + ",20");
+                                            while(rs.next()) {
+                                                out.print(no+" "+rs.getString(1)+"<br>");
+                                                no++;
+                                            }
+                                            out.print("</p>");
+                                            out.print("</div>");
+                                        }
+                                        out.print("</div>");
+                                    out.print("</div>");
+                                out.print("</div>");
+                            out.print("</div>");
                             out.print("</div>");
                         }
                     }
@@ -214,5 +279,11 @@
                 </form>
             </div>
         </div>
+        <script>$('.ui.accordion').accordion();</script>
+        <script>
+        $('#example6')
+        .progress('increment')
+        ;
+        </script>
     </body>
 </html>

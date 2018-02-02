@@ -18,6 +18,7 @@ chown mysql:mysql /var/run/mysqld
 
 建表
 id means the id of the post, aka the order (as default)
+pname represents participants'name (to avoid multiple submit)
 create table participant(name varchar(20), age int, occupation varchar(20), email varchar(50));
 create table seq(fluency float, logical float, emotion int, id int, pname varchar(20));
 create table em0(fluency float, logical float, emotion int, id int, pname varchar(20));
@@ -26,4 +27,21 @@ create table ecm0(fluency float, logical float, emotion int, id int, pname varch
 create table ecm1(fluency float, logical float, emotion int, id int, pname varchar(20));
 create table our0(fluency float, logical float, emotion int, id int, pname varchar(20));
 create table our1(fluency float, logical float, emotion int, id int, pname varchar(20));
-create table userstyle(id int, match int);
+create table userstyle(id int, ans int, pname varchar(20));
+
+数据:
+Input
+
+- post (pid, text)
+- reply-seq (pid, text)
+- reply-em (pid, pos, neg)
+- reply-ecm (pid, pos,neg)
+- reply-ours(pid, pos,neg) (*select the best)
+- reply-ours-userid(uid, userid, text)
+- users-userid(text) (*each user has its own table contains their tweets)
+
+Output
+
+- participant (name, age, occupation, e-mail)
+- result(pid, seq-1, seq-2, em-1, em-2, ecm-1, ecm-2, our-1, our-2)
+- userstyle(id, ans, pname varchar(20))

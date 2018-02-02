@@ -3,6 +3,7 @@
 <%
 int part =  Integer.parseInt(request.getParameter("part"));
 int part_num = Integer.parseInt(request.getParameter("part_num"));
+int user_num = 4;
 %>
 <html>
     <head>
@@ -35,7 +36,7 @@ int part_num = Integer.parseInt(request.getParameter("part_num"));
                     ResultSet rs;
                     if(!conn.isClosed()){
                         sql = conn.createStatement();
-                        out.print("part = " +part+" ; part_num = "+part_num+"<br>");
+                        //out.print("part = " +part+" ; part_num = "+part_num+"<br>");
                         String name = "";
                         String occupation = "";
                         String email = "";
@@ -47,16 +48,16 @@ int part_num = Integer.parseInt(request.getParameter("part_num"));
                             age = Integer.parseInt(request.getParameter("age"));
                             occupation = request.getParameter("occupation");
                             email = request.getParameter("email");
-                            out.print("name = "+name+"<br>");
+                            /*out.print("name = "+name+"<br>");
                             out.print("age = "+age+"<br>");
                             out.print("occupation = "+occupation+"<br>");
                             out.print("email = "+email+"<br>");
-                            out.print("insert into participant values('"+name+"',"+age+",'"+occupation+"','"+email+"');");
+                            out.print("insert into participant values('"+name+"',"+age+",'"+occupation+"','"+email+"');");*/
                             sql.execute("insert into participant values('"+name+"',"+age+",'"+occupation+"','"+email+"');");
                         } else {
-                            out.print("#$%$@%^%$@^!!@#@<br>");
+                            //out.print("#$%$@%^%$@^!!@#@<br>");
                         }
-                        out.print("!#%%^&!@$#^%%^*!@#@#%#$^#$^%$<br>");
+                        //out.print("!#%%^&!@$#^%%^*!@#@#%#$^#$^%$<br>");
                         String table[] = {"seq","em","ecm","our"};
                         String term[] = {"fluency","logical","emotion"}; 
                         for (int j = part-part_num; j < part; j++) {
@@ -69,7 +70,7 @@ int part_num = Integer.parseInt(request.getParameter("part_num"));
                                 } else {
                                     seq[i] = 1;
                                 }
-                                out.print(pname+"="+seq[i]+"<br>");
+                                //out.print(pname+"="+seq[i]+"<br>");
                             }
                             sql.execute("insert into seq values("+seq[0]+","+seq[1]+","+seq[2]+","+j+",'"+name+"');");
                             int res0[] = new int[3]; // result for em,ecm,our
@@ -83,14 +84,14 @@ int part_num = Integer.parseInt(request.getParameter("part_num"));
                                     } else {
                                         res0[i] = 0;
                                     }
-                                    out.print(sname+"="+res0[i]+"<br>");
+                                    //out.print(sname+"="+res0[i]+"<br>");
                                     sname = pname + "v1";
                                     if (request.getParameter(sname) != null) {
                                         res1[i] = Integer.parseInt(request.getParameter(sname));
                                     } else {
                                         res1[i] = 1;
                                     }
-                                    out.print(sname+"="+res1[i]+"<br>");
+                                    //out.print(sname+"="+res1[i]+"<br>");
                                 }
                                 if (k==1) {
                                     sql.execute("insert into em0 values("+res0[0]+","+res0[1]+","+res0[2]+","+j+",'"+name+"');");
@@ -103,6 +104,18 @@ int part_num = Integer.parseInt(request.getParameter("part_num"));
                                 if (k==3) {
                                     sql.execute("insert into our0 values("+res0[0]+","+res0[1]+","+res0[2]+","+j+",'"+name+"');");
                                     sql.execute("insert into our1 values("+res1[0]+","+res1[1]+","+res1[2]+","+j+",'"+name+"');");
+                                }
+                            }
+                            for (int k = 1; k <= user_num; k++) {
+                                String str = "user_reply"+k+"v"+j;
+                                int userreply = 0;
+                                if (request.getParameter(str) != null) {
+                                    userreply = Integer.parseInt(request.getParameter(str));
+                                }
+                                if (userreply == k) { // assume this order is the right answer for now
+                                    sql.execute("insert into userstyle values (" + j + ",1,'"+name+"');");
+                                } else {
+                                    sql.execute("insert into userstyle values (" + j + ",0,'"+name+"');");
                                 }
                             }
                         }
