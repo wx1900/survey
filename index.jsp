@@ -217,6 +217,65 @@
                             out.print("</div>");
                             out.print("</div>");
                             }
+                            out.print("<h3 class=\"ui top attached header\">User Style</h3>");
+                            out.print("<div class = \"ui blue segment\">");
+                                out.print("<div class=\"ui vertical segment\">");
+                                    out.print("<h3 class=\"ui header\">Post</h3>");
+                                    sql = conn.createStatement();
+                                    rs = sql.executeQuery("select * from post limit 0,1");
+                                    while(rs.next()) {
+                                        out.print("<h4>"+rs.getString(1)+"</h4>");
+                                    }
+                                    out.print("<div class=\"ui section divider\"></div>");
+                                    for (int i = 0; i < user_num; i++) {
+                                        out.print("<h3 class=\"ui header\">Reply "+(i+1)+"</h3>");
+                                        rs = sql.executeQuery("select * from comment limit "+i+",1");
+                                        while(rs.next()) {
+                                            out.print("<h4>"+rs.getString(1)+"</h4>");
+                                        }
+                                    }
+                                out.print("</div>");
+                                out.print("<div class=\"ui vertical segment\">");
+                                    out.print("<div class=\"ui form\">");
+                                        out.print("<h3 class=\"ui header\">Please select the user with the closest language style. </h3>");
+                                        out.print("<div class=\"ui horizontal segments\">");
+                                        for (int k = 0; k < user_num; k++) {
+                                            out.print("<div class=\"ui segment\">");
+                                            out.print("<div class=\"ui small header\">Reply"+(k+1)+"</div>");
+                                            out.print("<div class=\"grouped fields\">");
+                                            for (int i = 0; i < user_num; i++){
+                                                out.print("<div class\"field\">");
+                                                out.print("<div class=\"ui radio checkbox\">");
+                                                out.print("<input type=\"radio\" name=\"user_reply"+(k+1)+"\" value=\"" + (i+1) + "\">");
+                                                out.print("<label>User "+ (i+1) +"</label>");
+                                                out.print("</div>");
+                                                out.print("</div>");
+                                            }
+                                            out.print("</div>");
+                                            out.print("</div>");
+                                        }
+                                        out.print("</div>");
+                                        out.print("<div class=\"ui accordion\">");
+                                        for (int i = 0; i < user_num; i++) {
+                                            out.print("<div class=\"title\">");
+                                            out.print("<i class=\"dropdown icon\"></i>");
+                                            out.print("User "+(i+1));
+                                            out.print("</div>");
+                                            out.print("<div class=\"content\">");
+                                            out.print("<p class=\"transition hidden\">");
+                                            int no = 1;
+                                            rs = sql.executeQuery("select * from comment limit " + (i*20) + ",20");
+                                            while(rs.next()) {
+                                                out.print(no+" "+rs.getString(1)+"<br>");
+                                                no++;
+                                            }
+                                            out.print("</p>");
+                                            out.print("</div>");
+                                        }
+                                        out.print("</div>");
+                                    out.print("</div>");
+                                out.print("</div>");
+                            out.print("</div>");
                             out.print("</div>");
                         }
                     }
@@ -299,7 +358,7 @@
         })
         ;
         </script>
-
+        <script>$('.ui.accordion').accordion();</script>
         <%-- use default value --%>
         <%-- <%
             out.print("<script>");

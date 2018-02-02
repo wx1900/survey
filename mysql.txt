@@ -1,0 +1,29 @@
+关闭mysql:
+cd /usr/bin
+sudo ./mysqladmin -u root -p shutdown
+
+启动mysql:
+cd /usr/bin
+sudo ./mysqld_safe &
+
+导出数据:
+select * from user into outfile '/tmp/test.txt'
+
+导入数据:
+load data local infile '/home/thea/all/Sigir_st/survey/data/comment.txt' into table comment;
+
+错误error"/var/run/mysqld" for unix socket file don't exists:
+mkdir -p /var/run/mysqld
+chown mysql:mysql /var/run/mysqld
+
+建表
+id means the id of the post, aka the order (as default)
+create table participant(name varchar(20), age int, occupation varchar(20), email varchar(50));
+create table seq(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table em0(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table em1(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table ecm0(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table ecm1(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table our0(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table our1(fluency float, logical float, emotion int, id int, pname varchar(20));
+create table userstyle(id int, match int);
