@@ -2,7 +2,7 @@
 <%
     int page_num = 0; // 第几份问卷
     int startpos = 0; // 问卷从第几个post开始
-    int part_num = 1; // 一份问卷有几个post
+    int part_num = 10; // 一份问卷有几个post
     int user_num = 4; // user style 一次评测几个用户
     int rate_num = 5; // 评测等级有几个
     double font_size = 1.23;
@@ -26,6 +26,7 @@
         </script>
     </head>
     <body>
+        <%-- <script>console.log("test");</script> --%>
         <div class = "ui blue inverted vertical segment">
             <h1 class="ui inverted header" style="margin-left:20px">Survey</h1>
         </div>
@@ -33,8 +34,33 @@
             <div class = "ui vertical padded segment">
                 <div class = "ui padded segment" style="font-size: 1.23em">
                     <div class="ui horizontal divider"><h2>Introduction</h2></div>
-                    <p stype="color: red">[TODO]</p>
-                    For the following tweet's reply, please rate its language structure and emotional orientation.
+                    The purpose of this questionnaire is to evaluate the machine-generated responses by humen. The evaluation includes two aspects:
+                    <ul>
+                    <li>Evaluation on the content, this part has eight replies. To each reply, choose a number between 1 and 5 corresponding to the level 1 to 5. 
+                                    The higher the level the better the fluency of the content and better grammatical structure</li>
+            
+                    <li>Evaluate the diversity of responses, including the diversity of emotions and linguistic styles in this part. There are totally 4 responses in this part:</li>
+                    <ul>
+                    <li> Evaluate the polarity of emotions, divided into five scores of -2, -1, 0, 1, and 2, with negative numbers representing negative status, positive 
+                            numbers representing positive status, and 0 representing neutral status. The higher the absolute value of the score, the stronger the emotion. 
+                            Such as 2 positive tendencies stronger than 1.</li>
+                    <li>To assess the diversity of language styles, in this part below, there are 20 tweets usually sent by each user. 
+                            According to the user's usual linguistic style, choose which user might be the author of each reply.
+                            The author of the reply may only be these four users. Responses are randomly selected, so there may be multiple replies to the same user.</li>
+                        </ul>
+                    </ul>
+                
+                    这个问卷的目的是对机器产生回复进行人工评价．评价包括两个方面:
+                    <ul>
+                    <li>对内容进行打分，这一部分有一共有８条回复，在每条回复对应的位置，选择１到５之间一个数字，分别对应等级１到５，等级越高表示内容的流畅性和语法结构越好</li>
+                    <li>评价回复的多样性，在这一部分包括情感多样性和语言风格多样性，这一部分一共有４条回复</li>
+                        <ul>
+                        <li> 对情感的极性进行评价，分为-2,-1,0,1,2五个分数，负数代表消极状态，正数代表积极状态，０表示中立状态．分数的绝对值越高表示情感越强烈．比如２的积极倾向比１更强．</li>
+                        <li>对语言风格多样性进行评价，在该部分下面给出了每个个用户平时所用发的２０条推文，根据用户平时的语言风格，选择每个回复的作者可能是哪个用户．
+   　                    回复的作者只可能是这四个用户．回复是随机选择的，所以可能有多条回复的作者都是同一个用户．</li>
+                        </ul>
+                    </ul>
+                    </div>
                 </div>
                 <%
                     out.print("<form class = \"ui form vertical segment\" action = \"test2.jsp?part=" + startpos + "&part_num="+part_num+"\" method = \"POST\">");
@@ -119,7 +145,7 @@
 
                             out.print("<tr>");
                             // out.print("<td>Seq2Seq</td>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
+                            rs = sql.executeQuery("select * from seqreply limit "+j+",1");
                             while(rs.next()) {
                                 out.print("<td>"+rs.getString(1)+"</td>");
                             }
@@ -138,7 +164,7 @@
                             
                             out.print("<tr>");
                             // out.print("<td>Embedding</td>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
+                            rs = sql.executeQuery("select * from emreply limit "+j+",1");
                             while(rs.next()) {
                                 out.print("<td>"+rs.getString(1)+"</td>");
                             }
@@ -157,7 +183,7 @@
                     
                             out.print("<tr>");
                             // out.print("<td rowspan=\"2\">ECM</td>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
+                            rs = sql.executeQuery("select * from ecmreplypos limit "+j+",1");
                             while(rs.next()) {
                                 out.print("<td>"+rs.getString(1)+"</td>");
                             }
@@ -174,7 +200,7 @@
                             out.print("</div>");
                             out.print("</td></tr>");
                             out.print("<tr>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
+                            rs = sql.executeQuery("select * from ecmreplyneg limit "+j+",1");
                             while(rs.next()) {
                                 out.print("<td>"+rs.getString(1)+"</td>");
                             }
@@ -191,75 +217,56 @@
                             out.print("</div>");
                             out.print("</td></tr>");
 
-                            out.print("<tr>");
-                            // out.print("<td rowspan=\"4\">Ours</td>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
-                            while(rs.next()) {
-                                out.print("<td>"+rs.getString(1)+"</td>");
+                            
+                            out.print("<script> console.log(\"Section "+(j+1)+"\");</script>");
+                            int order[] = new int[4];
+                            int orderemo[] = new int[4];
+                            for (int k = 0; k < user_num; k++) {
+                                double rand = Math.random();
+                                if (rand < 0.25) order[k] = 1;
+                                else if (rand < 0.5) order[k] = 2;
+                                else if (rand < 0.75) order[k] = 3;
+                                else order[k] = 4;
+                                out.print("<script>console.log(\"order ["+(k+1)+"] = "+order[k]+"\");</script>");
                             }
-                            out.print("<td>");
-                            out.print("<div class=\"inline fields\">");
-                            for (int i = 0; i < rate_num; i++) {
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"ourscontenta"+j+"\" value=\"" + (i+1) + "\" required>");
-                                out.print("<label>" + (i+1) + "</label>");
-                                out.print("</div>");
-                                out.print("</div>");
+                            for (int k = 0; k < user_num; k++) {
+                                double rand = Math.random();
+                                if (rand < 0.5) orderemo[k] = 0;
+                                else orderemo[k] = 1;
+                                out.print("<script>console.log(\"orderemo ["+(k+1)+"] = "+orderemo[k]+"\");</script>");
+                                out.print("<input type=\"hidden\" name=\"emohidden"+k+"n"+j+"\" value=\""+orderemo[k]+"\">");
+                                //out.print("<script>console.log(\"<input type=\"hidden\" name=\"emohidden"+j+"n"+k+"\" value=\""+orderemo[k]+"\">\");</script>");
                             }
-                            out.print("</div>");
-                            out.print("</td></tr>");
-                            out.print("<tr>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
-                            while(rs.next()) {
-                                out.print("<td>"+rs.getString(1)+"</td>");
+                            
+                            // String 
+                            String user_reply[] = new String[4];
+                            for (int k = 0; k < user_num; k++) {
+                                String table = "userpos";
+                                if (orderemo[k] == 0)
+                                    table = "userneg";
+                                rs = sql.executeQuery("select * from "+table+" limit " + (j*2+order[k]) + ",1");
+                                while(rs.next()) {
+                                    user_reply[k] = rs.getString(1);
+                                }
+                                out.print("<script>console.log(\""+user_reply[k]+"\");</script>");
                             }
-                            out.print("<td>");
-                            out.print("<div class=\"inline fields\">");
-                            for (int i = 0; i < rate_num; i++) {
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"ourscontentb"+j+"\" value=\"" + (i+1) + "\" required>");
-                                out.print("<label>" + (i+1) + "</label>");
+
+                            for (int k = 0; k < user_num; k++) {
+                                out.print("<tr>");
+                                out.print("<td>"+user_reply[k]+"</td>");
+                                out.print("<td>");
+                                out.print("<div class=\"inline fields\">");
+                                for (int i = 0; i < rate_num; i++) {
+                                    out.print("<div class=\"field\">");
+                                    out.print("<div class=\"ui radio checkbox\">");
+                                    out.print("<input type=\"radio\" name=\"ourscontent"+(k+1)+""+j+"\" value=\"" + (i+1) + "\" required>");
+                                    out.print("<label>" + (i+1) + "</label>");
+                                    out.print("</div>");
+                                    out.print("</div>");
+                                }
                                 out.print("</div>");
-                                out.print("</div>");
+                                out.print("</td></tr>");
                             }
-                            out.print("</div>");
-                            out.print("</td></tr>");
-                            out.print("<tr>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
-                            while(rs.next()) {
-                                out.print("<td>"+rs.getString(1)+"</td>");
-                            }
-                            out.print("<td>");
-                            out.print("<div class=\"inline fields\">");
-                            for (int i = 0; i < rate_num; i++) {
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"ourscontentc"+j+"\" value=\"" + (i+1) + "\" required>");
-                                out.print("<label>" + (i+1) + "</label>");
-                                out.print("</div>");
-                                out.print("</div>");
-                            }
-                            out.print("</div>");
-                            out.print("</td></tr>");
-                            out.print("<tr>");
-                            rs = sql.executeQuery("select * from comment limit "+j+",1");
-                            while(rs.next()) {
-                                out.print("<td>"+rs.getString(1)+"</td>");
-                            }
-                            out.print("<td>");
-                            out.print("<div class=\"inline fields\">");
-                            for (int i = 0; i < rate_num; i++) {
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"ourscontentd"+j+"\" value=\"" + (i+1) + "\" required>");
-                                out.print("<label>" + (i+1) + "</label>");
-                                out.print("</div>");
-                                out.print("</div>");
-                            }
-                            out.print("</div>");
-                            out.print("</td></tr>");
                             out.print("</tbody></table>");
 
                             out.print("<table class=\"ui celled compact table\">");
@@ -272,67 +279,31 @@
                             out.print("<tbody>");
                             for (int k = 0; k < user_num; k++) {
                                 out.print("<tr>");
-                                rs = sql.executeQuery("select * from comment limit "+j+",1");
-                                while(rs.next()) {
-                                    out.print("<td>"+rs.getString(1)+"</td>");
-                                }
-                                
+                                out.print("<td>"+user_reply[k]+"</td>");                                
                                 out.print("<td>");
                                 out.print("<div class=\"compact field\">");
-                                out.print("<select name=\"user"+j+"\" required>");
+                                out.print("<select name=\"user"+k+"n"+j+"\" required>");
                                 out.print("<option value>Select...</option>");
-                                for (int i = 0; i < user_num; i++)
-                                    out.print("<option value=\""+(i+1)+"\">User "+(i+1)+"</option>");
+                                for (int i = 0; i < user_num; i++) {
+                                    int value = 0;
+                                    if (i == (order[k]-1))
+                                        value = 1;
+                                    out.print("<script>console.log(\"section "+(j+1)+" reply "+(k+1)+" user "+(i+1)+" value "+value+"\");</script>");
+                                    out.print("<option value=\""+value+"\">User "+(i+1)+"</option>");
+                                }
                                 out.print("</select></div></td>");
-                                /*
-                                out.print("<div class=\"ui fluid selection dropdown\">");
-                                out.print("<input type=\"hidden\" name=\"section"+(j+1)+"reply"+(k+1)+"\">");
-                                out.print("<div class=\"default text\" data-rule=\"required\">Author</div>");
-                                out.print("<i class=\"dropdown icon\"></i>");
-                                out.print("<div class=\"menu\">");
-                                for (int i = 0; i < user_num; i++) {
-                                    out.print("<div class=\"item\" data-value=\""+(i+1)+"\">User&nbsp;"+(i+1)+"</div>");
-                                }
-                                out.print("</div></div></div></td>");    
-                                */
-                            /*    out.print("<div class=\"inline fields\">");
-                                for (int i = 0; i < user_num; i++) {
-                                    out.print("<div class=\"field\">");
-                                    out.print("<div class=\"ui radio checkbox\">");
-                                    out.print("<input type=\"radio\" name=\"user"+j+"n"+k+"\" value=\"" + i + "\">");
-                                    out.print("<label>User " + (i+1) + "</label>");
-                                    out.print("</div>");
-                                    out.print("</div>");
-                                }
-                                out.print("</div></td>");*/
                                 
                                 out.print("<td>");
                                 out.print("<div class=\"inline fields\">");
                                 for (int i = 0; i < rate_num; i++) {
                                     out.print("<div class=\"field\">");
                                     out.print("<div class=\"ui radio checkbox\">");
-                                    out.print("<input type=\"radio\" name=\"emo"+j+"n"+k+"\" value=\"" + (i-2) + "\" required>");
+                                    out.print("<input type=\"radio\" name=\"emo"+k+"n"+j+"\" value=\"" + (i-2) + "\" required>");
                                     out.print("<label>" + (i-2) + "</label>");
                                     out.print("</div>");
                                     out.print("</div>");
                                 }
                                 out.print("</div>");
-
-
-                                /*out.print("<div class=\"inline fields\">");
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"emo"+j+"\" value=\"1\">");
-                                out.print("<label>" + 1 + "</label>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("<div class=\"field\">");
-                                out.print("<div class=\"ui radio checkbox\">");
-                                out.print("<input type=\"radio\" name=\"emo"+j+"\" value=\"0\">");
-                                out.print("<label>" + 0 + "</label>");
-                                out.print("</div>");
-                                out.print("</div>");
-                                out.print("</div>");*/
                                 out.print("</td></tr>");
                             }
                             out.print("</tbody></table>");
@@ -347,7 +318,7 @@
                                 out.print("<div class=\"content\">");
                                 out.print("<p class=\"transition hidden\">");
                                 int no = 1;
-                                rs = sql.executeQuery("select * from comment limit " + (i*20) + ",20");
+                                rs = sql.executeQuery("select * from user"+(page_num*user_num+i+1)+" limit " + (i*20) + ",20");
                                 while(rs.next()) {
                                     out.print(no+" "+rs.getString(1)+"<br>");
                                     no++;

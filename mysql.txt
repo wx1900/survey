@@ -34,14 +34,28 @@ Input
 
 - post (pid, text)
 - reply-seq (pid, text)
-- reply-em (pid, pos, neg)
-- reply-ecm (pid, pos,neg)
-- reply-ours(pid, pos,neg) (*select the best)
-- reply-ours-userid(uid, userid, text)
+- reply-em (pid, text)
+- reply-ecm (pid, pos, neg) 
+- reply-ours (pid, pos, neg) (*select the best)
+- reply-ours-userid (uid, userid, text)
 - users-userid(text) (*each user has its own table contains their tweets)
 
 Output
 
-- participant (name, age, occupation, e-mail)
+- participant (name, age, occupation, email)
 - result(pid, seq-1, seq-2, em-1, em-2, ecm-1, ecm-2, our-1, our-2)
 - userstyle(id, ans, pname varchar(20))
+
+一份问卷 10 个 post
+产生随即答案
+一份问卷统一用4个user
+user1-4
+userprofile:
+create table user1(text mediumtext);
+load data --
+intput : create table emreply(text mediumtext); [seqreply][ecmreplypos][ecmreplyneg]
+         create table uesr1reply(text mediumtext); [user1][user2]---[user16] <对应每条post一条pos一条neg>
+output : create table seqcontent (value int, id int, name vartext(50)); [emcontent][ecmcontentpos][ecmcontentneg][ourscontent]
+create table oursuser (value int, id int, name vatext(50));
+create table useremo(value int, ans int, id int, name varchar(50));
+

@@ -1,0 +1,16 @@
+这个问卷的目的是对机器产生回复进行人工评价．评价包括两个方面:
+- 对内容进行打分，这一部分有一共有８条回复，在每条回复对应的位置，选择１到５之间一个数字，分别对应等级１到５，等级越高表示内容的流畅性和语法结构越好
+- 评价回复的多样性，在这一部分包括情感多样性和语言风格多样性，这一部分一共有４条回复
+　 - 对情感的极性进行评价，分为-2,-1,0,1,2五个分数，负数代表消极状态，正数代表积极状态，０表示中立状态．分数的绝对值越高表示情感越强烈．比如２的积极倾向比１更强．
+   - 对语言风格多样性进行评价，在该部分下面给出了每个个用户平时所用发的２０条推文，根据用户平时的语言风格，选择每个回复的作者可能是哪个用户．
+   　回复的作者只可能是这四个用户．回复是随机选择的，所以可能有多条回复的作者都是同一个用户．
+The purpose of this questionnaire is to evaluate the machine-generated responses by humen. The evaluation includes two aspects:
+ １ Evaluation on the content, this part has eight replies. To each reply, choose a number between 1 and 5 corresponding to the level 1 to 5. 
+    The higher the level the better the fluency of the content and better grammatical structure
+ ２ Evaluate the diversity of responses, including the diversity of emotions and linguistic styles in this part. There are totally 4 responses in this part:
+    2.1 Evaluate the polarity of emotions, divided into five scores of -2, -1, 0, 1, and 2, with negative numbers representing negative status, positive 
+        numbers representing positive status, and 0 representing neutral status. The higher the absolute value of the score, the stronger the emotion. 
+        Such as 2 positive tendencies stronger than 1.
+    2.2 To assess the diversity of language styles, in this part below, there are 20 tweets usually sent by each user. 
+        According to the user's usual linguistic style, choose which user might be the author of each reply.
+        The author of the reply may only be these four users. Responses are randomly selected, so there may be multiple replies to the same user.
