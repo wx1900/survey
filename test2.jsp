@@ -24,9 +24,9 @@ int user_num = 4;
                     <div class="value">
                         Thank you!
                     </div>
-                    <div>
-                    <img src="pikaq.png">
-                    </div>
+                    <%-- <div> --%>
+                    <%-- <img src="pikaq.png"> --%>
+                    <%-- </div> --%>
                 </div>
             </div>
             <%
